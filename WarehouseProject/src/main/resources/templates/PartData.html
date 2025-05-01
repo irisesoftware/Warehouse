@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	
+	<div th:insert="fragments/commonui :: userheader"></div>
+	<div th:insert="fragments/commonui :: usermenu"></div>
+	<div class="container">
+	
+		<div class="card">
+
+			<div class="card-header bg-primary text-white text-center">
+				<h3>WELCOME TO PART DATA PAGE</h3>
+			</div>
+
+			<div class="card-body">
+			<a th:href="@{/st/excel}" class="btn btn-info">Excel Export</a> |
+			<a th:href="@{/st/pdf}" class="btn btn-info">PDF Export</a>  
+				<table class="table table-hover">
+					<tr class="bg-success text-white">
+						<th>ID</th>
+						<th>CODE</th>
+						<th>DIMENSIONS</th>
+						<th>COST</th>
+						<th>CURRENCY</th>
+						<th>UOM</th>
+						<th>SALE(OM)</th>
+						<th>DESCRIPTION</th>
+						<th>OPERATION</th>
+					</tr>
+					<!-- for(ShipmentType ob:list) {} -->
+					<tr th:each="ob:${list}">
+						<td th:text="${ob.id}"></td>
+						<td th:text="${ob.partCode}"></td>
+						<td>
+							W:<span th:text="${ob.partWid}"></span>,
+							L:<span th:text="${ob.partLen}"></span>,
+							H:<span th:text="${ob.partHt}"></span>
+						</td>
+						<td th:text="${ob.partBaseCost}"></td>
+						<td th:text="${ob.partBaseCurrency}"></td>
+						<td th:text="${ob.uom.uomModel}"></td>
+						<td th:text="${ob.omSale.orderCode}"></td>
+						<td th:text="${ob.partDesc}"></td>
+						<td>
+							<a th:href="@{/part/delete(id=${ob.id})}" title="remove" class="btn btn-danger"> DELETE </a>
+							|
+							<a th:href="@{/part/edit(id=${ob.id})}"  class="btn btn-warning"> EDIT </a>
+							|
+							<a th:href="@{/part/excelone(id=${ob.id})}"  class="btn btn-info"> EXCEL </a>
+						</td>
+					</tr>
+				</table>
+
+			</div>
+			
+			<div class="card-footer alert alert-success" th:if="${message!=null}">
+				<span th:text="${message}"></span>
+			</div>
+
+		</div>
+	</div>
+<script type="text/javascript">
+$(document).ready(function() {
+	$('a[title="remove"]').click(function(){
+		return confirm("Do You want to Delete PART?");
+	});
+});
+</script>
+</body>
+</html>

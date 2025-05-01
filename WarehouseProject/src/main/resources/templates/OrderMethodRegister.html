@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	
+	<div th:insert="fragments/commonui :: userheader"></div>
+	<div th:insert="fragments/commonui :: usermenu"></div>
+	<div class="container">
+	
+		<div class="card">
+
+			<div class="card-header bg-primary text-white text-center">
+				<h3>ORDER METHOD REGISTER PAGE</h3>
+			</div>
+
+			<div class="card-body">
+				<form id="orderMethodForm" th:action="@{/om/save}" method="post">
+					<!-- row#1 -->
+					<div class="row">
+						<div class="col-3">
+							<label>Order Mode</label>
+						</div>
+						<div class="col-4">
+							<input type="radio" name="orderMode" value="Sale" />Sale <input
+								type="radio" name="orderMode" value="Purchase" />Purchase
+						</div>
+						<div class="col-5">
+							<span id="orderModeError"></span>
+						</div>
+					</div>
+
+
+					<!-- row#2 -->
+					<div class="row">
+						<div class="col-3">
+							<label>Order Code</label>
+						</div>
+						<div class="col-4">
+							<input type="text" id="orderCode" name="orderCode" class="form-control" />
+						</div>
+						<div class="col-5">
+							<span id="orderCodeError"></span>
+						</div>
+					</div>
+
+					<!-- row#3 -->
+					<div class="row">
+						<div class="col-3">
+							<label>Order Type</label>
+						</div>
+						<div class="col-4">
+							<select id="orderType" name="orderType" class="form-control">
+								<option value="">-SELECT-</option>
+								<option value="FIFO">FIFO</option>
+								<option value="LIFO">LIFO</option>
+								<option value="FCFO">FCFO</option>
+								<option value="FEFO">FEFO</option>
+							</select>
+						</div>
+						<div class="col-5">
+							<span id="orderTypeError"></span>
+						</div>
+					</div>
+
+					<!-- row#4 -->
+					<div class="row">
+						<div class="col-3">
+							<label>Order Accept</label>
+						</div>
+						<div class="col-4">
+							<input type="checkbox" name="orderAcpt" value="Multi-Model" />
+							Multi-Model <input type="checkbox" name="orderAcpt"
+								value="Accept Return" /> Accept Return
+
+						</div>
+						<div class="col-5">
+							<span id="orderAcptError"></span>
+						</div>
+					</div>
+
+					<!-- row#5 -->
+					<div class="row">
+						<div class="col-3">
+							<label>Description</label>
+						</div>
+						<div class="col-4">
+							<textarea id="orderDesc" name="orderDesc" class="form-control"></textarea>
+						</div>
+						<div class="col-5">
+							<span id="orderDescError"></span>
+						</div>
+					</div>
+
+					<input type="submit" value="Add Order Method" class="btn btn-success"/>
+				</form>
+			</div>
+			<!-- Card Body end -->
+
+			<div class="card-footer alert alert-success" th:if="${message!=null}">
+				<span th:text="${message}"></span>
+			</div>
+
+		</div>
+		<!-- card end -->
+	</div>
+	<script>
+      $(document).ready(function () {
+        //1. hide error sections
+        $("#orderModeError").hide();
+        $("#orderCodeError").hide();
+        $("#orderTypeError").hide();
+        $("#orderAcptError").hide();
+        $("#orderDescError").hide();
+
+        //2. define error variables
+        var orderModeError = false;
+        var orderCodeError = false;
+        var orderTypeError = false;
+        var orderAcptError = false;
+        var orderDescError = false;
+
+        //3. define validate functions
+        function validate_orderMode() {
+          var len = $('[name="orderMode"]:checked').length;
+          if (len == 0) {
+            $("#orderModeError").show();
+            $("#orderModeError").html("*Please choose <b> one Mode</b>");
+            $("#orderModeError").css("color", "red");
+            orderModeError = false;
+          } else {
+            $("#orderModeError").hide();
+            orderModeError = true;
+          }
+
+          return orderModeError;
+        }
+
+        function validate_orderCode() {
+          var val = $("#orderCode").val();
+          var exp = /^[A-Z0-9\.\-]{4,14}$/;
+          if (val == "") {  
+            $("#orderCodeError").show();
+            $("#orderCodeError").html("*Enter <b>Order Code</b>");
+            $("#orderCodeError").css('color','red');
+            orderCodeError = false;
+          } else if (!exp.test(val)) {
+            $("#orderCodeError").show();
+            $("#orderCodeError").html("*Invaild <b>Order Code</b>");
+            $("#orderCodeError").css('color','red');
+            orderCodeError = false;
+          } else {
+        	
+        	//ajax starts  
+        	$.ajax({
+        		url : 'validateCode',
+        		data: { "code": val},
+        		success:function(respTxt) {
+        			if(respTxt!=""){ //error exist
+        				 $("#orderCodeError").show();
+        		         $("#orderCodeError").html(respTxt);
+        		         $("#orderCodeError").css('color','red');
+        		         orderCodeError = false;
+        			} else { //no error
+        				$("#orderCodeError").hide();
+        	            orderCodeError = true;
+        			}
+        		}
+        	});
+        	//ajax end
+        	  
+            
+          }
+
+          return orderCodeError;
+        }
+
+        function validate_orderType() {
+          var val = $("#orderType").val();
+          if (val == '') {
+            $("#orderTypeError").show();
+            $("#orderTypeError").html("*Please choose <b> one Type</b>");
+            $("#orderTypeError").css("color", "red");
+            orderTypeError = false;
+          } else {
+            $("#orderTypeError").hide();
+            orderTypeError = true;
+          }
+            return orderTypeError;
+        }
+
+        function validate_orderAcpt() {
+            var len = $("[name='orderAcpt']:checked").length;
+            if(len==0) {
+                $("#orderAcptError").show();
+                $("#orderAcptError").html("*Choose at least<b> one Option</b>");
+                $("#orderAcptError").css('color','red');
+                orderAcptError = false;
+            } else {
+                $("#orderAcptError").hide();
+                orderAcptError = true;
+            }
+            return orderAcptError;
+        }
+
+        function validate_orderDesc() {
+          var val = $("#orderDesc").val();
+          var exp = /^[A-Za-z0-9\-\.\s\_\,]{10,120}$/;
+          if(val=='') {
+            $("#orderDescError").show();
+            $("#orderDescError").html("Description <b> can not empty </b>");
+            $("#orderDescError").css('color','red');
+            orderDescError = false;
+          } else if(!exp.test(val)) {
+            $("#orderDescError").show();
+            $("#orderDescError").html("Description <b> is not valid </b>");
+            $("#orderDescError").css('color','red');
+            orderDescError = false;
+          } else {
+            $("#orderDescError").hide();
+            orderDescError = true;
+          }
+          return orderDescError;
+        }
+
+        //4. link action events
+        $("[name='orderMode']").change(function () {
+          validate_orderMode();
+        });
+
+        $("#orderCode").keyup(function () {
+          $(this).val($(this).val().toUpperCase());
+          validate_orderCode();
+        });
+
+        $("#orderType").change(function(){
+            validate_orderType();
+        })
+
+        $("[name='orderAcpt']").change(function(){
+            validate_orderAcpt();
+        })
+
+        $("#orderDesc").keyup(function(){
+           validate_orderDesc();
+        })
+
+        //5. on click submit
+        $("#orderMethodForm").submit(function () {
+          //validate all input again
+          validate_orderMode();
+          validate_orderCode();
+          validate_orderType();
+          validate_orderAcpt();
+          validate_orderDesc();
+
+          //if all are ture then submit form
+          if (orderModeError && orderCodeError 
+          && orderTypeError && orderAcptError
+          && orderDescError ) return true;
+          //else do not submit form
+          else return false;
+        });
+      });
+    </script>
+
+</body>
+</html>

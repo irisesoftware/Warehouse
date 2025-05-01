@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+
+		<div th:insert="fragments/commonui :: userheader"></div>
+		<div th:insert="fragments/commonui :: usermenu"></div>
+	<div class="container">
+
+		<div class="card">
+
+			<div class="card-header bg-primary text-white text-center">
+				<h3>GRN REGISTER PAGE</h3>
+			</div>
+			<!-- card header end -->
+
+			<div class="card-body">
+				<form th:action="@{/grn/save}" method="post">
+					<!-- Row#1 code -->
+					<div class="row">
+						<div class="col-3">
+							<label>GRN CODE</label>
+						</div>
+						<div class="col-4">
+							<input type="text" id="grnCode" name="grnCode" class="form-control" />
+						</div>
+						<div class="col-5">
+							<span id="grnCodeError"></span>
+						</div>
+					</div>
+					<!-- Row#2 type -->
+					<div class="row">
+						<div class="col-3">
+							<label>GRN TYPE</label>
+						</div>
+						<div class="col-4">
+							<input type="text" id="grnType" name="grnType" class="form-control" />
+						</div>
+						<div class="col-5">
+							<span id="grnTypeError"></span>
+						</div>
+					</div>
+					<!-- Row#3 PO -->
+					<div class="row">
+						<div class="col-3">
+							<label>ORDER CODE</label>
+						</div>
+						<div class="col-4">
+							<select name="po.id" id="po" class="form-control">
+								<option value="">-SELECT-</option>
+								<option th:each="ob:${pos}"
+									th:text="${ob.value}"
+									th:value="${ob.key}"
+								/>
+							</select>
+						</div>
+						<div class="col-5">
+							<span id="poError"></span>
+						</div>
+					</div>
+					
+					
+					<!-- Row#4 DESC -->
+					<div class="row">
+						<div class="col-3">
+							<label>Description</label>
+						</div>
+						<div class="col-4">
+							<textarea id="grnDescription" name="grnDescription" class="form-control"></textarea>
+						</div>
+						<div class="col-5">
+							<span id="grnDescriptionError"></span>
+						</div>
+					</div>
+					<input type="submit" value="Add GRN" class="btn btn-success"/>
+				</form>
+			</div>
+			<!-- card body end -->
+			<div class="card-footer alert alert-success" th:if="${message!=null}">
+				<span th:text="${message}"></span>
+			</div>
+			<!-- card footer end -->
+		</div>
+		<!-- card end -->
+	</div>
+
+</body>
+</html>

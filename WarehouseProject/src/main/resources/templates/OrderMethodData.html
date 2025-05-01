@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	
+	<div th:insert="fragments/commonui :: userheader"></div>
+	<div th:insert="fragments/commonui :: usermenu"></div>
+	<div class="container">
+	
+		<div class="card">
+
+			<div class="card-header bg-primary text-white text-center">
+				<h3>WELCOME TO ORDER METHOD DATA PAGE</h3>
+			</div>
+
+			<div class="card-body">
+				<table class="table table-hover">
+					<tr class="bg-success text-white">
+						<th>ID</th>
+						<th>MODE</th>
+						<th>CODE</th>
+						<th>TYPE</th>
+						<th>ACCEPT</th>
+						<th>DESCRIPTION</th>
+						<th>OPERATION</th>
+					</tr>
+					<!-- for(ShipmentType ob:list) {} -->
+					<tr th:each="ob:${list}">
+						<td th:text="${ob.id}"></td>
+						<td th:text="${ob.orderMode}"></td>
+						<td th:text="${ob.orderCode}"></td>
+						<td th:text="${ob.orderType}"></td>
+						<td th:text="${ob.orderAcpt}"></td>
+						<td th:text="${ob.orderDesc}"></td>
+						<td>
+							<a th:href="@{/om/delete(id=${ob.id})}"  class="btn btn-danger"> DELETE </a>
+							|
+							<a th:href="@{/om/edit(id=${ob.id})}"  class="btn btn-warning"> EDIT </a>
+						</td>
+					</tr>
+				</table>
+
+			</div>
+			
+			<div class="card-footer alert alert-success" th:if="${message!=null}">
+				<span th:text="${message}"></span>
+			</div>
+
+		</div>
+	</div>
+
+</body>
+</html>

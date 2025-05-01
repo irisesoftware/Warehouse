@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+
+<body>
+<body>
+		<div th:insert="fragments/commonui :: userheader"></div>
+	<div class="container">
+
+		<div class="card">
+
+			<div class="card-header bg-primary text-white text-center">
+				<h3>USER ACTIVATE PAGE</h3>
+			</div>
+
+			<div class="card-body">
+				<form th:action="@{/user/activate}" method="POST">
+
+					<div class="row">
+						<div class="col-2">
+							<label for="emailId">EmailId</label>
+						</div>
+						<div class="col-4">
+							<input type="text" id="emailId" name="emailId"
+								class="form-control" placeholder="Enter Email Id"
+								required="required" />
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-2">
+							<label for="otp">OTP</label>
+						</div>
+						<div class="col-4">
+							<input type="password" id="otp" name="otp"
+								class="form-control" placeholder="Enter OTP"
+								 maxlength="4" />
+						</div>
+					</div>
+
+				<br/>
+				<input type="submit" name="opr" value="Activate" class="btn btn-success" /> |
+				<input type="submit" name="opr" value="Resend" class="btn btn-warning" />
+				<br/>
+				<a th:href="@{/user/showLogin}" >LOGIN</a>
+				</form>
+			</div>
+			<!--card body end-->
+
+			<div class="card-footer bg-white" th:if="${message!=null}">
+				<span  th:text="${message}"></span>
+			</div>
+			<!-- card footer end -->
+		</div>
+		<!-- card end -->
+	</div>
+</body>
+</html>

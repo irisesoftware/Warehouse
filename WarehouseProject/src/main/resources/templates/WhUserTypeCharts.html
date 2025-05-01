@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	
+	<div th:insert="fragments/commonui :: userheader"></div>
+	<div th:insert="fragments/commonui :: usermenu"></div>
+	
+	<div class="container">
+		<div class="card">
+
+			<div class="card-header bg-primary text-white text-center">
+				<h3>WELCOME TO WAREHOUSE USERS CHARTS PAGE</h3>
+			</div>
+
+			<div class="card-body">
+				<img th:src="@{/whUserTypeA.png}"/>
+				<br/>
+				<img th:src="@{/whUserTypeB.png}"/>
+			</div>
+		</div>
+     </div>
+
+</body>
+</html>

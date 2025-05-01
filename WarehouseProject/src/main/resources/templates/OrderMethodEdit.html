@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	
+	<div th:insert="fragments/commonui :: userheader"></div>
+	<div th:insert="fragments/commonui :: usermenu"></div>
+	<div class="container">
+	
+		<div class="card">
+
+			<div class="card-header bg-primary text-white text-center">
+				<h3>ORDER METHOD EDIT PAGE</h3>
+			</div>
+
+			<div class="card-body">
+				<form th:action="@{/om/update}" method="post" th:object="${orderMethod}">
+				<!-- row#0 -->
+					<div class="row">
+						<div class="col-3">
+							<label>Order Id</label>
+						</div>
+						<div class="col-4">
+							<input type="text" th:field="*{id}" class="form-control" readOnly/>
+						</div>
+						<div class="col-5">
+							<span id="orderModeError"></span>
+						</div>
+					</div>
+				
+					<!-- row#1 -->
+					<div class="row">
+						<div class="col-3">
+							<label>Order Mode</label>
+						</div>
+						<div class="col-4">
+							<input type="radio" th:field="*{orderMode}" value="Sale" />Sale <input
+								type="radio" th:field="*{orderMode}" value="Purchase" />Purchase
+						</div>
+						<div class="col-5">
+							<span id="orderModeError"></span>
+						</div>
+					</div>
+
+
+					<!-- row#2 -->
+					<div class="row">
+						<div class="col-3">
+							<label>Order Code</label>
+						</div>
+						<div class="col-4">
+							<input type="text" th:field="*{orderCode}" class="form-control" />
+						</div>
+						<div class="col-5">
+							<span id="orderCodeError"></span>
+						</div>
+					</div>
+
+					<!-- row#3 -->
+					<div class="row">
+						<div class="col-3">
+							<label>Order Type</label>
+						</div>
+						<div class="col-4">
+							<select th:field="*{orderType}" class="form-control">
+								<option value="">-SELECT-</option>
+								<option value="FIFO">FIFO</option>
+								<option value="LIFO">LIFO</option>
+								<option value="FCFO">FCFO</option>
+								<option value="FEFO">FEFO</option>
+							</select>
+						</div>
+						<div class="col-5">
+							<span id="orderTypeError"></span>
+						</div>
+					</div>
+
+					<!-- row#4 -->
+					<div class="row">
+						<div class="col-3">
+							<label>Order Accept</label>
+						</div>
+						<div class="col-4">
+							<input type="checkbox" th:field="*{orderAcpt}" value="Multi-Model" />
+							Multi-Model <input type="checkbox" th:field="*{orderAcpt}"
+								value="Accept Return" /> Accept Return
+
+						</div>
+						<div class="col-5">
+							<span id="orderAcptError"></span>
+						</div>
+					</div>
+
+					<!-- row#5 -->
+					<div class="row">
+						<div class="col-3">
+							<label>Description</label>
+						</div>
+						<div class="col-4">
+							<textarea th:field="*{orderDesc}" class="form-control"></textarea>
+						</div>
+						<div class="col-5">
+							<span id="orderDescError"></span>
+						</div>
+					</div>
+
+					<input type="submit" value="Update Order Method" class="btn btn-success"/>
+				</form>
+			</div>
+			<!-- Card Body end -->
+		</div>
+		<!-- card end -->
+	</div>
+
+
+</body>
+</html>

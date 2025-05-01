@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+
+<body>
+<body>
+	<div class="container">
+	<div th:insert="fragments/commonui :: userheader"></div>
+	<div th:insert="fragments/commonui :: usermenu"></div>
+
+		<div th:insert="fragments/commonui :: userheader"></div>
+
+		<div class="card">
+
+			<div class="card-header bg-primary text-white text-center">
+				<h3>USER PASSWORD UPDATE PAGE</h3>
+			</div>
+
+			<div class="card-body">
+				<form id="pwdUpdateForm" th:action="@{/user/newPwdUpdate}" method="POST">
+
+					<div class="row">
+						<div class="col-2">
+							<label for="pwd1">New Password</label>
+						</div>
+						<div class="col-4">
+							<input type="password" id="pwd1" name="password"
+								class="form-control" placeholder="Enter New Password"
+								 />
+						</div>
+						<div class="col-6">
+							<span id="pwdCondition"></span>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-2">
+							<label for="pwd2">Re Enter Password</label>
+						</div>
+						<div class="col-4">
+							<input type="password" id="pwd2" name="password2"
+								class="form-control" placeholder="Re-Enter New Password"
+								 />
+						</div>
+						<div class="col-6">
+							<span id="pwdError"></span>
+						</div>
+					</div>
+
+					<input type="submit" value="Update" class="btn btn-success" />
+				</form>
+			</div>
+			<!--card body end-->
+
+			<div class="card-footer bg-info">
+				<span th:text="${message}" class="text-white"></span>
+			</div>
+			<!-- card footer end -->
+
+		</div>
+		<!-- card end -->
+	</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#pwdError").hide();
+	$("#pwdCondition").hide();
+	
+	var pwdError = false;
+	var pwdCondition = false;
+	
+	function validate_pwdCondition() {
+		var p1 = $("#pwd1").val();
+		var exp =/^[a-zA-Z0-9\.\-\_]{2,12}$/;
+		
+		if(!exp.test(p1)) {
+		    $("#pwdCondition").css("color","red");
+		    $("#pwdCondition").html("<b>Password is Not valid</b>");
+			$("#pwdCondition").show();
+			pwdCondition = false;
+		} else {
+			$("#pwdCondition").hide();
+			pwdCondition = true;
+		}
+	
+		return pwdCondition;	
+	}
+	
+	function validate_samePwd() {
+		var p1 = $("#pwd1").val();
+		var p2 = $("#pwd2").val();
+		
+		if(p1 != p2 ) {
+		    $("#pwdError").css("color","red");
+		    $("#pwdError").html("<b>Password Not matching</b>");
+			$("#pwdError").show();
+			pwdError = false;
+		} else {
+			$("#pwdError").hide();
+			pwdError = true;
+		}
+	
+		return pwdError;
+	}
+	
+	$("#pwd1").keyup(function(){
+		validate_pwdCondition();
+	});
+	$("#pwd2").keyup(function(){
+		validate_samePwd();
+	});
+
+	$("#pwdUpdateForm").submit(function(){
+		validate_pwdCondition();
+		validate_samePwd();
+		if(pwdError && pwdCondition) return true;
+		else return false;
+	});
+});
+</script>	
+</body>
+</html>

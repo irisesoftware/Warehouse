@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	
+	<div th:insert="fragments/commonui :: userheader"></div>
+	<div th:insert="fragments/commonui :: usermenu"></div>
+	<div class="container">
+	
+		<div class="card">
+
+			<div class="card-header bg-primary text-white text-center">
+				<h3>WELCOME TO PART REGISTER PAGE!</h3>
+			</div>
+
+			<div class="card-body">
+				<!-- Form id="" -->
+				<form th:action="@{/part/save}" method="POST">
+
+	
+					<div class="row">
+						<div class="col-3">
+							<label>PART CODE</label>
+						</div>
+						<div class="col-4">
+							<input type="text" name="partCode" id="partCode" class="form-control"/>
+						</div>
+						<div class="col-5">
+							<span id="partCodeError"></span>
+						</div>
+					</div>
+
+
+					<div class="row">
+						<div class="col-3">
+							<label>Part Dimensions</label>
+						</div>
+						<div class="col-4">
+							W:<input type="text" name="partWid" class="form-control" />
+							L:<input type="text" name="partLen" class="form-control"/>
+							H:<input type="text" name="partHt" class="form-control"/>
+						</div>
+						<div class="col-5">
+							<span id="partDimError"></span>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-3">
+							<label>BASE COST</label>
+						</div>
+						<div class="col-4">
+							<input type="text" name="partBaseCost" id="partBaseCost" class="form-control"/>
+						</div>
+						<div class="col-5">
+							<span id="partBaseCostError"></span>
+						</div>
+					</div>
+
+
+					<div class="row">
+						<div class="col-3">
+							<label>Base Currency</label>
+						</div>
+						<div class="col-4">
+							<select name="partBaseCurrency" id="partBaseCurrency" class="form-control">
+								<option value="">-SELECT-</option>
+								<option value="INR">INR</option>
+								<option value="AUD">AUD</option>
+								<option value="USD">USD</option>
+							</select>
+						</div>
+						<div class="col-5">
+							<span id="partBaseCurrencyError"></span>
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col-3">
+							<label>Uom</label>
+						</div>
+						<div class="col-4">
+							<select name="uom.id" id="uom" class="form-control">
+								<option value="">-SELECT-</option>
+								<option th:each="ob:${uoms}" th:value="${ob.key}" th:text="${ob.value}"/>
+							</select>
+						</div>
+						<div class="col-5">
+							<span id="uomError"></span>
+						</div>
+					</div>
+					
+					
+					<div class="row">
+						<div class="col-3">
+							<label>Order Method(SALE)</label>
+						</div>
+						<div class="col-4">
+							<select name="omSale.id" id="omSale" class="form-control">
+								<option value="">-SELECT-</option>
+								<option th:each="ob:${omSales}" th:value="${ob.key}" th:text="${ob.value}"/>
+							</select>
+						</div>
+						<div class="col-5">
+							<span id="omSaleError"></span>
+						</div>
+					</div>
+					
+
+					<div class="row">
+						<div class="col-3">
+							<label>Description</label>
+						</div>
+						<div class="col-4">
+							<textarea name="partDesc" id="partDesc" class="form-control"></textarea>
+						</div>
+						<div class="col-5">
+							<span id="partDescError"></span>
+						</div>
+					</div>
+
+					<input type="submit" value="Add Part" class="btn btn-success"/>
+				</form>
+
+			</div> <!-- Card Body end -->
+			
+			<div class="card-footer alert alert-success" th:if="${message!=null}">
+				<span th:text="${message}"></span>
+			</div>
+
+		</div>
+		<!-- card end -->
+
+	</div>
+	<!-- container end -->
+</body>
+</html>

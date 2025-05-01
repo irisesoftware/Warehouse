@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+
+</head>
+<body>
+	
+	<div th:insert="fragments/commonui :: userheader"></div>
+	<div th:insert="fragments/commonui :: usermenu"></div>
+<div class="container">
+
+		<div class="card">
+
+			<div class="card-header bg-primary text-white text-center">
+				<h3>PURCHASE ORDER DATA PAGE</h3>
+			</div>
+
+			<div class="card-body">
+		
+				<table class="table table-hover">
+					<tr class="bg-success text-white">
+						<th>ID</th>
+						<th>CODE</th>
+						<th>SHIPMENT</th>
+						<th>VENDOR</th>
+						<th>STATUS</th>
+						<th>OPRATIONS</th>
+					</tr>
+					<tr th:each="ob:${list}">
+						<td th:text="${ob.id}"></td>
+						<td th:text="${ob.orderCode}"></td>
+						<td th:text="${ob.shipment.shipmentCode}"></td>
+						<td th:text="${ob.vendor.userCode}"></td>
+						<td th:text="${ob.status}"></td>
+						<td>
+							<a th:href="@{/po/parts(poId=${ob.id})}" class="btn btn-info">PARTS</a>
+							<th:block th:if="${'ORDERED' == ob.status}">
+								<a th:href="@{/po/genInv(poId=${ob.id})}" class="btn btn-warning">GENERATE INVOICE</a>
+							</th:block>
+							<th:block th:if="${'INVOICED' == ob.status}">
+								<a th:href="@{/po/printInv(poId=${ob.id})}" class="btn btn-success">PRINT INVOICE</a>
+							</th:block>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<!--card body end-->
+			
+			<div class="card-footer bg-warning text-white text-center"
+				th:if="${message != null}">
+				<span th:text="${message}"></span>
+			</div> <!-- card footer end -->
+
+		</div> <!-- card end -->
+
+	</div>
+	<!-- container end -->
+</body>
+</html>

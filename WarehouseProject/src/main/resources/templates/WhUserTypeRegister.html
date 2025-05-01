@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	
+	<div th:insert="fragments/commonui :: userheader"></div>
+	<div th:insert="fragments/commonui :: usermenu"></div>
+	<div class="container">
+
+		<div class="card">
+
+			<div class="card-header bg-primary text-white text-center">
+				<h3>Warehouse User Type Register Page!</h3>
+			</div>
+			<!-- card header end -->
+
+
+			<div class="card-body">
+				<form id="whRegForm" th:action="@{/wh/save}" method="POST">
+
+					<!-- row#1 -->
+					<div class="row">
+						<div class="col-3">
+							<label>USER TYPE</label>
+						</div>
+						<div class="col-4">
+							<input type="radio" name="userType" value="Vendor" /> Vendor 
+							<input type="radio" name="userType" value="Customer" /> Customer
+						</div>
+						<div class="col-5">
+							<span id="userTypeError"></span>
+						</div>
+					</div>
+
+
+					<!-- row#2 -->
+					<div class="row">
+						<div class="col-3">
+							<label for="userCode">USER CODE</label>
+						</div>
+						<div class="col-4">
+							<input type="text" name="userCode" id="userCode"
+								class="form-control" />
+						</div>
+						<div class="col-5">
+							<span id="userCodeError"></span>
+						</div>
+					</div>
+
+
+
+					<!-- row#3 -->
+					<div class="row">
+						<div class="col-3">
+							<label>USER FOR</label>
+						</div>
+						<div class="col-4">
+							<input type="text" name="userFor" id="userFor"
+								class="form-control" readOnly />
+						</div>
+						<div class="col-5">
+							<!-- <span id="userForError"></span> -->
+						</div>
+					</div>
+
+
+
+					<!-- row#4 -->
+					<div class="row">
+						<div class="col-3">
+							<label for="userEmail">USER EMAIL</label>
+						</div>
+						<div class="col-4">
+							<input type="text" name="userEmail" id="userEmail"
+								class="form-control" />
+						</div>
+						<div class="col-5">
+							<span id="userEmailError"></span>
+						</div>
+					</div>
+
+					<!-- row#5 -->
+					<div class="row">
+						<div class="col-3">
+							<label>USER CONTACT</label>
+						</div>
+						<div class="col-4">
+							<textarea name="userContact" id="userContact"
+								class="form-control"></textarea>
+						</div>
+						<div class="col-5">
+							<span id="userContactError"></span>
+						</div>
+					</div>
+
+
+					<!-- row#6 -->
+					<div class="row">
+						<div class="col-3">
+							<label>USER ID TYPE</label>
+						</div>
+						<div class="col-4">
+							<select name="userIdType" id="userIdType" class="form-control">
+								<option value="">-SELECT-</option>
+								<option value="PAN CARD">PAN CARD</option>
+								<option value="AADHAR CARD">AADHAR CARD</option>
+								<option value="VOTER ID CARD">VOTER ID CARD</option>
+								<option value="OTHER">OTHER</option>
+							</select>
+						</div>
+						<div class="col-5">
+							<span id="userIdTypeError"></span>
+						</div>
+					</div>
+
+
+					<!-- row#7 -->
+					<div class="row" id="ifOtherRow">
+						<div class="col-3">
+							<label>*IF OTHER</label>
+						</div>
+						<div class="col-4">
+							<input type="text" name="userIfOther" id="userIfOther"
+								class="form-control" />
+						</div>
+						<div class="col-5">
+							<span id="userIfOtherError"></span>
+						</div>
+					</div>
+
+					<!-- row#8 -->
+					<div class="row">
+						<div class="col-3">
+							<label>ID NUMBER</label>
+						</div>
+						<div class="col-4">
+							<input type="text" name="userIdNum" id="userIdNum"
+								class="form-control" />
+						</div>
+						<div class="col-5">
+							<span id="userIdNumError"></span>
+						</div>
+					</div>
+
+
+
+					<input type="submit" value="Add User" class="btn btn-success" />
+				</form>
+			</div>
+			<!-- card body end -->
+
+			<div th:if="${message!=null}" class="card-footer bg-info text-white">
+				<span th:text="${message}"></span>
+			</div>
+			<!-- card footer end -->
+
+		</div>
+		<!-- card  end -->
+
+
+	</div>
+	<!-- container end -->
+
+<script type="text/javascript">
+      $(document).ready(function () {
+        //1. hide error sections
+        $("#userEmailError").hide();
+        $("#userTypeError").hide();
+        $("#userCodeError").hide();
+        $("#userContactError").hide();
+        $("#userIdTypeError").hide();
+
+        //2. define error variable
+        var userEmailError = false;
+        var userTypeError = false;
+        var userCodeError = false;
+        var userContactError = false;
+        var userIdTypeError = false;
+
+        //3. define validation function
+        function validate_userEmail() {
+          var val = $("#userEmail").val();
+          var exp = /^[A-Za-z0-9\.\-\_]+\@[a-z\.]+\.[a-z\.]{2,12}$/;
+          if (val == "") {
+            $("#userEmailError").show();
+            $("#userEmailError").html("Email <b> Can not be empty</b>");
+            $("#userEmailError").css("color", "red");
+            userEmailError = false;
+          } else if (!exp.test(val)) {
+            $("#userEmailError").show();
+            $("#userEmailError").html("Email <b> is invalid</b>");
+            $("#userEmailError").css("color", "red");
+            userEmailError = false;
+          } else {
+            $.ajax({
+              url: "mail",
+              data: { userEmail: val },
+              success: function (resTxt) {
+                if (resTxt == "") {
+                  $("#userEmailError").hide();
+                  userEmailError = true;
+                } else {
+                  $("#userEmailError").show();
+                  $("#userEmailError").html(resTxt);
+                  $("#userEmailError").css("color", "red");
+                  userEmailError = false;
+                }
+              },
+            });
+          }
+
+          return userEmailError;
+        }
+
+        function validate_userType() {
+          var len = $('input[type="radio"][name="userType"]:checked').length;
+          if (len == 0) {
+            $("#userTypeError").show();
+            $("#userTypeError").html("Please select <b> User Type</b>");
+            $("#userTypeError").css("color", "red");
+            userTypeError = false;
+          } else {
+            $("#userTypeError").hide();
+            userTypeError = true;
+          }
+          return userTypeError;
+        }
+
+        function validate_userCode() {
+          var val = $("#userCode").val();
+          var exp = /^[A-Z0-9\.\-]{4,18}$/;
+
+          if (val == "") {
+            $("#userCodeError").show();
+            $("#userCodeError").html("Code <b> Can not be empty</b>");
+            $("#userCodeError").css("color", "red");
+            userCodeError = false;
+          } else if (!exp.test(val)) {
+            $("#userCodeError").show();
+            $("#userCodeError").html("Code <b> is invalid</b>");
+            $("#userCodeError").css("color", "red");
+            userCodeError = false;
+          } else {
+            $("#userCodeError").hide();
+            userCodeError = true;
+          }
+
+          return userCodeError;
+        }
+
+        function validate_userContact() {
+          var val = $("#userContact").val();
+          var exp = /^[A-Za-z0-9\.\-\@\,\#\:\;\s]{10,200}$/;
+
+          if (val == "") {
+            $("#userContactError").show();
+            $("#userContactError").html("Contact <b> Can not be empty</b>");
+            $("#userContactError").css("color", "red");
+            userContactError = false;
+          } else if (!exp.test(val)) {
+            $("#userContactError").show();
+            $("#userContactError").html("Contact <b> is invalid</b>");
+            $("#userContactError").css("color", "red");
+            userContactError = false;
+          } else {
+            $("#userContactError").hide();
+            userContactError = true;
+          }
+
+          return userContactError;
+        }
+
+        function validate_userIdType() {
+          var val = $("#userIdType").val();
+          if (val == "") {
+            $("#userIdTypeError").show();
+            $("#userIdTypeError").html("IdType <b> Can not be empty</b>");
+            $("#userIdTypeError").css("color", "red");
+            userIdTypeError = false;
+          } else {
+            if (val == "OTHER") {
+              $("#ifOtherRow").show();
+            } else {
+              $("#userIfOther").val("");
+              $("#ifOtherRow").hide();
+            }
+
+            $("#userIdTypeError").hide();
+            userIdTypeError = true;
+          }
+          return userIdTypeError;
+        }
+
+        //Link with action events
+        $('input[type="radio"][name="userType"]').change(function () {
+          validate_userType();
+        });
+
+        $("#userIdType").change(function () {
+          validate_userIdType();
+        });
+
+        $("#userContact").keyup(function () {
+          validate_userContact();
+        });
+
+        $("#userCode").keyup(function () {
+          $(this).val($(this).val().toUpperCase());
+          validate_userCode();
+        });
+
+        $("#userEmail").keyup(function () {
+          validate_userEmail();
+        });
+
+        //hide by default
+        $("#ifOtherRow").hide();
+
+        //task#1 AutoFill for UserType
+        $('input[type="radio"][name="userType"]').change(function () {
+          autoFillUserFor();
+        });
+
+        function autoFillUserFor() {
+          var val = $('input[type="radio"][name="userType"]:checked').val();
+          if (val == "Vendor") {
+            $("#userFor").val("Purchase");
+          } else if (val == "Customer") {
+            $("#userFor").val("Sale");
+          }
+        }
+
+        //on submit later...
+        $("#whRegForm").submit(function () {
+          validate_userType();
+          validate_userEmail();
+          validate_userCode();
+          validate_userContact();
+          validate_userIdType();
+
+          if (
+            userTypeError &&
+            userEmailError &&
+            userCodeError &&
+            userContactError &&
+            userIdTypeError
+          )
+            return true;
+          else return false;
+        });
+      });
+    </script>
+	
+	
+</body>
+</html>

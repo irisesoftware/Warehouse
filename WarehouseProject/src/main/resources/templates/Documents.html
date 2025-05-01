@@ -1,0 +1,165 @@
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<div th:insert="fragments/commonui :: userheader"></div>
+	<div th:insert="fragments/commonui :: usermenu"></div>
+<div class="container">
+
+    <div class="card">
+
+        <div class="card-header bg-primary text-white text-center">
+            <h3>WELCOME TO DOCUMENTS PAGE</h3>
+        </div>
+
+        <div class="card-body">
+            <form id="docCreateForm" th:action="@{/documents/upload}" method="POST" enctype="multipart/form-data">
+                
+                <div class="row">
+                    <div class="col-3">
+                        <label>DOCUMENT ID</label>
+                    </div>
+                    <div class="col-4">
+                        <input type="text" id="docId" name="docId" class="form-control"/>
+                    </div>
+                    <div class="col-5">
+                        <span id="docIdError"></span>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-3">
+                        <label>DOCUMENT (FILE)</label>
+                    </div>
+                    <div class="col-4">
+                        <input type="file" name="docOb" id="docOb" class="form-control"/>
+                    </div>
+                    <div class="col-5">
+                        <span id="docObError"></span>
+                    </div>
+                </div>
+                    <input type="submit" value="UPLOAD" class="btn btn-success"/>
+                
+            </form>
+            
+            <hr/>
+            
+            <table class="table">
+			<tr class="bg-info text-white">
+				<th>ID</th>
+				<th>FILE NAME</th>
+				<th>LINK</th>
+			</tr>
+			<tr th:each="ob:${list}">
+				<th th:text="${ob[0]}"></th>
+				<th th:text="${ob[1]}"></th>
+				<th><a class="btn btn-warning" th:href="@{/documents/download(id=${ob[0]})}">DOWNLOAD</a></th>
+			</tr>
+		</table>
+        </div>
+    </div>        
+</div>    
+<script> 
+$(document).ready(function(){
+    //1. hide error section
+    $("#docIdError").hide();
+    $("#docObError").hide();
+
+    //2. define error variables
+    var docIdError = false;
+    var docObError = false;
+
+    //3. define validate function
+    function validate_docId() {
+        var val = $("#docId").val();
+        var exp = /^[1-9][0-9]*$/;
+        if(val=='') {
+            $("#docIdError").show();
+            $("#docIdError").html("Enter <b> Document ID </b>");
+            $("#docIdError").css('color','red');
+            docIdError = false;
+        } else if(!exp.test(val)) {
+            $("#docIdError").show();
+            $("#docIdError").html("Invalid <b> Document ID </b>");
+            $("#docIdError").css('color','red');
+            docIdError = false;
+        } else {
+            $("#docIdError").hide();
+            docIdError = true;
+        }
+
+        return docIdError;
+    }
+
+    // nothing is selected -- only on submit
+    function validate_docObRequired() {
+        var val = $("#docOb").val();
+        if(val=='') {
+            $("#docObError").show();
+            $("#docObError").html("Choose <b> one File</b>");
+            $("#docObError").css('color','red');
+        }
+        return docObError;
+    }
+
+    // on change file
+    function validate_docOb(ob) {
+        // file details
+        var fname = ob.name;
+        var fsize = ob.size; // bytes 1024 B = 1 KB
+       // alert(fsize);
+        //console.log(ob);
+        var fext = fname.substring(fname.lastIndexOf(".") + 1);
+        //console.log("selected file ext is =>"+fext);
+        var allowedExt = [ "png", "jpg", "jpeg", "doc", "docx", "zip" ];
+
+        if($.inArray(fext,allowedExt) == -1) { //if not exist
+            $("#docObError").show();
+            $("#docObError").html("Allowed Files <b>" + allowedExt +"</b>");
+            $("#docObError").css('color','red');
+            docObError = false;
+        } else if(fsize <= 1024 * 20) {  // Min 20 KB
+            $("#docObError").show();
+            $("#docObError").html("File <b> Min Size 20 KB</b>");
+            $("#docObError").css('color','red');
+            docObError = false;
+        } else if(fsize > 1024 * 1024 * 10) {  // Max 10 MB
+            $("#docObError").show();
+            $("#docObError").html("File <b> Max Size 10 MB</b>");
+            $("#docObError").css('color','red');
+            docObError = false;
+        } else {
+            $("#docObError").hide();
+            docObError = true;
+        }
+
+        return docObError;
+    }
+
+    //4. link with action events
+    $("#docId").keyup(function(){
+        validate_docId();
+    })
+    $('input[type="file"][name="docOb"]').change(function(){
+        validate_docOb(this.files[0]);        
+        //validate_docOb(this.files[1]);
+        //validate_docOb(this.files[2]);
+    })
+
+
+    //5. on submit
+    $("#docCreateForm").submit(function(){
+        validate_docId();
+        validate_docObRequired();
+
+        if(docIdError && docObError) return true;
+        else return false;
+    })
+
+})
+</script>    
+</body>
+</html>
