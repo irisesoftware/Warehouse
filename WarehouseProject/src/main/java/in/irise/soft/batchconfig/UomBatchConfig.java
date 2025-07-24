@@ -41,12 +41,12 @@ public class UomBatchConfig {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}*/
-		reader.setLineMapper(new DefaultLineMapper<>() {{
+		reader.setLineMapper(new DefaultLineMapper<Uom>() {{
 			setLineTokenizer(new DelimitedLineTokenizer() {{
 				setDelimiter(",");
 				setNames("uomType","uomModel","description");
 			}});
-			setFieldSetMapper(new BeanWrapperFieldSetMapper<>() {{
+			setFieldSetMapper(new BeanWrapperFieldSetMapper<Uom>() {{
 				setTargetType(Uom.class);
 			}});
 		}});
