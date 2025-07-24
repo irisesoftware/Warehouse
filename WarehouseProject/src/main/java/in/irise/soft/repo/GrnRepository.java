@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import in.irise.soft.model.Grn;
 
 public interface GrnRepository 
-	extends JpaRepository<Grn, Integer>
+	extends JpaRepository<Grn, String>
 {
 	
 	@Query(value = "select * from grn_tab where grn_id_col=?", nativeQuery = true )
